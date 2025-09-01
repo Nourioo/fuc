@@ -1,19 +1,19 @@
 function displayPoem(response){
   console.log("Poem generated");
-  new TypeWriter("#poem", {
-    string: response.data.answer,
-    autoStart: true,
-    delay: 1,
-    cursor: "",
-  });
+  new Typewriter("#poem", {
+  strings: [response.data.answer],
+  autoStart: true,
+  delay: 50,
+  cursor: "",
+});
 }
  
 function generatePoem(event){
   event.preventDefault();
 
-  let instuctionInput= document.querySelector("#user-instructions");
+  let instructionInput = document.querySelector("#user-instructions");
   let apiKey ="540f410t39afca518e877dc5abodd75b";
-  let prompt= `Uder instructions: Generate a French poem about ${instuctionInput.value} `;
+  let prompt = `Under instructions: Generate a French poem about ${instructionInput.value}`;
   let context= "You are a romantic Poem expert and you love to write short poems, your mission is to generate a 4 line poem in HTML format. make sure to follow the user instructions";
   let apiUrl= `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
 
