@@ -1,13 +1,8 @@
 function displayPoem(response) {
-  console.log("Poem generated:", response.data.answer);
-
-  let poemElement = document.querySelector("#poem");
-  poemElement.innerHTML = ""; // clear previous poem
-
   new Typewriter("#poem", {
-    strings: [response.data.answer],
+    strings: response.data.answer,
     autoStart: true,
-    delay: 50,
+    delay: 1,
     cursor: "",
   });
 }
@@ -15,24 +10,18 @@ function displayPoem(response) {
 function generatePoem(event) {
   event.preventDefault();
 
-  let instructionInput = document.querySelector("#user-instructions");
-  let apiKey = "540f410t39afca518e877dc5abodd75b";
-  let prompt = `Under instructions: Generate a French poem about ${instructionInput.value}`;
+  let instructionsInput = document.querySelector("#user-instructions");
+  let apiKey = "20540f410t39afca518e877dc5abodd75b";
   let context =
-    "You are a romantic Poem expert and you love to write short poems, your mission is to generate a 4 line poem in HTML format. make sure to follow the user instructions";
+    "You are a romantic Poem expert and love to write short poems. You mission is to generate a 4 line poem in basic HTML and separate each line with a <br />. Make sure to follow the user instructions. Do not include a title to the poem. Sign the poem with 'SheCodes AI' inside a <strong> element at the end of the poem and NOT at the beginning";
+  let prompt = `User instructions: Generate a French poem about ${instructionsInput.value}`;
+  let apiURL = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
 
-  console.log("Generating poem");
-  console.log(`Prompt: ${prompt}`);
-  console.log(`Context: ${context}`);
+  let poemElement = document.querySelector("#poem");
+  poemElement.classList.remove("hidden");
+  poemElement.innerHTML = `<div class="generating">⏳ Generating a French poem about ${instructionsInput.value}</div>`;
 
-  axios
-    .post(
-      "https://api.shecodes.io/ai/v1/generate",
-      { prompt: prompt, context: context },
-      { headers: { Authorization: `Bearer ${apiKey}` } }
-    )
-    .then(displayPoem)
-    .catch((error) => console.error(error));
+  axios.get(apiURL).then(displayPoem);
 }
 
 let poemFormElement = document.querySelector("#poem-generator-form");
